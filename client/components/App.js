@@ -3,7 +3,7 @@ import Header from './Header';
 
 function App(props) {
   return (
-    <div>
+    <div className="container">
       <Header />
       <div className="jumbotron">
         <h1>Create and share your polls</h1>

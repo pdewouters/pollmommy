@@ -46,18 +46,22 @@ class PollDetails extends Component {
     return (
       <div>
         <h5>Poll: {description}</h5>
-        <PollChoices
-          isAuthenticated={this.state.isAuthenticated}
-          choices={choices}
-          onChoiceRemove={this.onChoiceRemove}
-          onChoiceVote={this.onChoiceVote}
-        />
-        <PollResults choices={choices} />
-        {
-          this.state.isAuthenticated
-          ? <AddChoice onChoiceAdd={this.onChoiceAdd} />
-          : ''
-        }
+        <div className="col-md-6">
+          <PollChoices
+            isAuthenticated={this.state.isAuthenticated}
+            choices={choices}
+            onChoiceRemove={this.onChoiceRemove}
+            onChoiceVote={this.onChoiceVote}
+          />
+          {
+            this.state.isAuthenticated
+            ? <AddChoice onChoiceAdd={this.onChoiceAdd} />
+            : ''
+          }
+        </div>
+        <div className="col-md-6">
+          <PollResults choices={choices} />
+        </div>
       </div>
     );
   }
