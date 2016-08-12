@@ -2,10 +2,32 @@ import React, { Component } from 'react';
 import { createContainer } from 'meteor/react-meteor-data';
 import { Polls } from '../../../imports/collections/Polls';
 import { Link } from 'react-router';
+import { withRouter } from 'react-router';
 
 class MyPolls extends Component {
+  constructor(props) {
+    super(props);
+    this.state = this.getMeteorData();
+  }
+
   onPollRemove(poll) {
     Meteor.call('polls.remove', poll);
+  }
+
+  getMeteorData() {
+    return { isAuthenticated: Meteor.userId() !== null };
+  }
+
+  componentWillMount() {
+    if (! this.state.isAuthenticated) {
+      this.props.router.push('/login');
+    }
+  }
+
+  componentDidUpdate(prevProps, prevState){
+    if (!this.state.isAuthenticated) {
+      this.props.router.push('/login');
+    }
   }
 
   renderPolls() {
@@ -39,4 +61,4 @@ class MyPolls extends Component {
 export default createContainer(() => {
   Meteor.subscribe('mypolls');
   return { polls: Polls.find({}).fetch() };
-}, MyPolls);
+}, withRouter(MyPolls));

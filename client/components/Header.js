@@ -1,13 +1,37 @@
 import React, { Component, PropTypes } from 'react';
-import { Link } from 'react-router';
-import Accounts from './Accounts';
+import { Link, withRouter } from 'react-router';
+import { Meteor } from 'meteor/meteor';
+import { createContainer } from 'meteor/react-meteor-data';
 
 class Header extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      isAuthenticated: Meteor.userId() !== null,
-    };
+    this.logout = this.logout.bind(this);
+  }
+
+  logout(e) {
+    e.preventDefault();
+    Meteor.logout();
+    this.props.router.push('/');
+  }
+
+  renderAuth() {
+    return (
+      <ul className="nav navbar-nav">
+        <li><Link to="/login">Log in</Link></li>
+        <li><Link to="/signup">Sign up</Link></li>
+      </ul>
+    );
+  }
+
+  renderMenu() {
+    return (
+      <ul className="nav navbar-nav">
+        <li><Link to="/mypolls">My Polls</Link></li>
+        <li><Link to="/polls/new">New Poll</Link></li>
+        <li><a href="#" onClick={this.logout}>Logout</a></li>
+      </ul>
+    );
   }
 
   render() {
@@ -17,23 +41,19 @@ class Header extends Component {
           <div className="navbar-header">
             <Link to="/" className="navbar-brand">PollMommy</Link>
           </div>
-          <ul className="nav navbar-nav">
-            <li><Accounts /></li>
-            {
-              this.state.isAuthenticated
-              ? <li><Link to="/mypolls">My Polls</Link></li>
-              : ''
-            }
-            {
-              this.state.isAuthenticated
-              ? <li><Link to="/polls/new">New Poll</Link></li>
-              : ''
-            }
-          </ul>
+          {
+            this.props.userId
+            ? this.renderMenu()
+            : this.renderAuth()
+          }
         </nav>
       </div>
     );
   }
 }
 
-export default Header;
+export default createContainer(() => {
+  return {
+    userId: Meteor.userId(),
+  };
+}, withRouter(Header));

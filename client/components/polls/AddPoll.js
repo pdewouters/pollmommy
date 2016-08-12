@@ -1,9 +1,18 @@
 import React, { Component } from 'react';
 import { createContainer } from 'meteor/react-meteor-data';
 import { Polls } from '../../../imports/collections/Polls';
-import { browserHistory } from 'react-router';
+import { withRouter } from 'react-router';
 
 class AddPoll extends Component {
+  constructor(props) {
+    super(props);
+    this.state = this.getMeteorData();
+  }
+
+  getMeteorData() {
+    return { isAuthenticated: Meteor.userId() !== null };
+  }
+
   onSubmit(e) {
     e.preventDefault();
     if (this.refs.description.value === '') {
@@ -15,8 +24,20 @@ class AddPoll extends Component {
       choices: [],
     };
     Meteor.call('polls.insert', poll, (error, pollId) => {
-      browserHistory.push(`/polls/${pollId}`);
+      this.props.router.push(`/polls/${pollId}`);
     });
+  }
+
+  componentWillMount() {
+    if (! this.state.isAuthenticated) {
+      this.props.router.push('/login');
+    }
+  }
+
+  componentDidUpdate(prevProps, prevState){
+    if (!this.state.isAuthenticated) {
+      this.props.router.push('/login');
+    }
   }
 
   render() {
@@ -38,4 +59,4 @@ class AddPoll extends Component {
   }
 }
 
-export default AddPoll;
+export default withRouter(AddPoll);
