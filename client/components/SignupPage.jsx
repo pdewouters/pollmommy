@@ -6,9 +6,18 @@ export default class SignupPage extends Component {
   constructor(props){
     super(props);
     this.state = {
-      error: ''
+      error: '',
+      modalOpen: this.props.location.state.openModal,
     };
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.onModalDismiss = this.onModalDismiss.bind(this);
+  }
+
+  onModalDismiss() {
+    this.setState({
+      modalOpen: false,
+    });
+    browserHistory.push('/');
   }
 
   handleSubmit(e){
@@ -30,12 +39,14 @@ export default class SignupPage extends Component {
 
   render(){
     const error = this.state.error;
+    const classes = `modal ${this.state.modalOpen ? 'show' : 'hide'}`;
     return (
-      <div className="modal show">
+      <div className={classes}>
         <div className="modal-dialog">
           <div className="modal-content">
             <div className="modal-header">
-              <h1 className="text-center">Sign up</h1>
+              <button type="button" className="close"  onClick={this.onModalDismiss} aria-label="Close"><span aria-hidden="true">&times;</span></button>
+              <h4 className="modal-title">Sign up</h4>
             </div>
             <div className="modal-body">
               { error.length > 0 ?

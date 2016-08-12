@@ -18,8 +18,8 @@ class Header extends Component {
   renderAuth() {
     return (
       <ul className="nav navbar-nav">
-        <li><Link to="/login">Log in</Link></li>
-        <li><Link to="/signup">Sign up</Link></li>
+        <li><Link to={{ pathname: '/login', state: { openModal: true } }}>Log in</Link></li>
+        <li><Link to={{ pathname: '/signup', state: { openModal: true } }}>Sign up</Link></li>
       </ul>
     );
   }
