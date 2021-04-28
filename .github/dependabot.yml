@@ -1,0 +1,19 @@
+version: 2
+updates:
+- package-ecosystem: npm
+  directory: "/"
+  schedule:
+    interval: daily
+  open-pull-requests-limit: 10
+  ignore:
+  - dependency-name: eslint-plugin-react
+    versions:
+    - 7.22.0
+    - 7.23.1
+  - dependency-name: meteor-node-stubs
+    versions:
+    - 1.0.1
+    - 1.0.2
+  - dependency-name: react
+    versions:
+    - 17.0.1
